@@ -22,8 +22,7 @@ form = """
 </form>
 """
 
-
-class MainPage(webapp2.RequestHandler):
+def valid_month(month):
 
     months = ['January',
               'February',
@@ -39,26 +38,25 @@ class MainPage(webapp2.RequestHandler):
               'December']
 
     month_abbvs = dict((m[:3].lower(), m) for m in months)
-
-    def get(self):
-        self.response.out.write(form)
-
-    def valid_month(month):
-        if month:
+    if month:
             short_month = month[:3].lower()
             return month_abbvs.get(short_month)
 
-    def valid_day(day):
+def valid_day(day):
         if day and day.isdigit():
             day = int(day)
         if day > 0 and day <= 31:
             return day
 
-    def valid_year(year):
+def valid_year(year):
         if year and year.isdigit():
             year = int(year)
         if year > 1900 and year <= 2020:
             return year
+
+class MainPage(webapp2.RequestHandler):
+    def get(self):
+        self.response.out.write(form)
 
     def post(self):
         user_month = valid_month(self.request.get('month'))
